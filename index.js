@@ -22,7 +22,9 @@ bot.configureIncomingWebhook({
   await page.goto("http://adhoc.mayhem.cbssports.com/brackets/standings");
   const results = await page.evaluate(() => {
     let text = "Ad Hoc Team United Standings\n";
+    text += 'http://adhoc.mayhem.cbssports.com/\n';
     text += `${document.querySelector("tr.footer").children[0].innerText}\n`;
+    text += '```\n';
     text += "Rank\tTeam Name\n";
     let foo = document.querySelector("table.data tbody");
     for (let child of foo.children) {
@@ -32,7 +34,8 @@ bot.configureIncomingWebhook({
         text += `${rank}\t${name}\n`;
       }
     }
-    return `\`\`\`${text}\`\`\``;
+    text += '```\n';
+    return text;
   });
 
   const msg = {
@@ -43,11 +46,11 @@ bot.configureIncomingWebhook({
     }]
   }
 
-  //console.log(results);
+  // console.log(results);
   bot.sendWebhook(msg, (err, res) => {
     if (err) throw err;
 
-    console.log(`\n🚀  Starbot report delivered 🚀`);
+    console.log(`\n🚀  bracketbot report delivered 🚀`);
   })
   await browser.close();
 })();
